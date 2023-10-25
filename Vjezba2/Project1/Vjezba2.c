@@ -3,88 +3,97 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define MAX_LENGTH 50
 
-typedef struct Person {
-    char name[50];
-    char surname[50];
+typedef struct _Person {
+    char name[MAX_LENGTH];
+    char surname[MAX_LENGTH];
     int birthYear;
-    struct Person* next;
+    struct _Person* next;
 } Person;
 
+typedef Person* Position;
 
-Person* addToBeginning(Person* head, const char* name, const char* surname, int birthYear) {
-    Person* newPerson = (Person*)malloc(sizeof(Person));
+Position createPerson() {
+    Position newPerson = NULL;
+    char name[MAX_LENGTH] = { 0 };
+    char surname[MAX_LENGTH] = { 0 };
+    int birthYear = 0;
 
-    if (newPerson == NULL) {
-        printf("Memory allocation failed.\n");
-        return head;
+    newPerson = (Position)malloc(sizeof(Person));
+    if (!newPerson) {
+        perror("Can't allocate memory!\n");
+        return NULL;
     }
 
-    strcpy(newPerson->name, name);
-    strcpy(newPerson->surname, surname);
-    newPerson->birthYear = birthYear;
-    newPerson->next = head;
+    printf("Enter name:\n");
+    scanf(" %s", newPerson->name);
+    printf("Enter surname:\n");
+    scanf(" %s", newPerson->surname);
+    printf("Enter birth year:\n");
+    scanf(" %d", &newPerson->birthYear);
+
+    newPerson->next = NULL;
 
     return newPerson;
 }
 
-
-Person* addToEnd(Person* head, const char* name, const char* surname, int birthYear) {
-    Person* newPerson = (Person*)malloc(sizeof(Person));
-
+Position addToBeginning(Position head) {
+    Position newPerson = createPerson();
     if (newPerson == NULL) {
-        printf("Memory allocation failed.\n");
         return head;
     }
 
-    strcpy(newPerson->name, name);
-    strcpy(newPerson->surname, surname);
-    newPerson->birthYear = birthYear;
-    newPerson->next = NULL;
+    newPerson->next = head;
+    return newPerson;
+}
+
+Position addToEnd(Position head) {
+    Position newPerson = createPerson();
+    if (newPerson == NULL) {
+        return head;
+    }
 
     if (head == NULL) {
         return newPerson;
     }
 
-    Person* current = head;
+    Position current = head;
     while (current->next != NULL) {
         current = current->next;
     }
 
     current->next = newPerson;
-
     return head;
 }
 
-
-void printList(Person* head) {
-    Person* current = head;
-
+void printList(Position head) {
+    Position current = head;
     printf("List of people:\n");
+
     while (current != NULL) {
         printf("Name: %s, Surname: %s, Birth Year: %d\n", current->name, current->surname, current->birthYear);
         current = current->next;
     }
 }
 
-
-void freeList(Person* head) {
+void freeList(Position head) {
     while (head != NULL) {
-        Person* temp = head;
+        Position temp = head;
         head = head->next;
         free(temp);
     }
 }
 
 int main() {
-    Person* list = NULL; 
+    Position head = NULL;
 
-    list = addToBeginning(list, "Josip", "Karaman", 2003);
-    list = addToEnd(list, "Ivo", "Javorcic", 1989);
-
-    printList(list);
-
-    freeList(list);
+    head = addToBeginning(head);
+    head = addToBeginning(head);
+    head = addToEnd(head);
+    head = addToEnd(head);
+    printList(head);
+    freeList(head);
 
     return 0;
 }
