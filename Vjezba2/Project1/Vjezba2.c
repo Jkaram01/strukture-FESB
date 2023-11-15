@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 ﻿#define _CRT_SECURE_NO_WARNINGS
+=======
+#define _CRT_SECURE_NO_WARNINGS
+>>>>>>> 6e7270edad41011a63ecedbb8d816ebf8d69e0f6
 #define MAX_LENGTH (50)
 #define NO_PERSON_FOUND (NULL)
 #define EMPTY_LIST (-1)
